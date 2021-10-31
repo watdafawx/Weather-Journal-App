@@ -31,7 +31,7 @@ npm start
 
 * Twitter: [@watdafawx](https://twitter.com/watdafawx)
 * Github: [@watdafawx](https://github.com/watdafawx)
-* LinkedIn: [@Michael saad](https://linkedin.com/in/Michael saad)
+* LinkedIn: [@Michael saad](https://linkedin.com/in/michael-saad-261256212/)
 
 ## Show your support
 
