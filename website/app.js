@@ -19,6 +19,7 @@ const retrieveData = async () => {
     // Write updated data to DOM elements
     document.getElementById("temp").innerHTML =
       Math.round(allData.main.temp) + "°C";
+    temp.style = '';
     document.getElementById("content").innerHTML = allData.user.feel;
     document.getElementById("date").innerHTML = allData.user.date;
     let icon = allData.weather[0].icon;

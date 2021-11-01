@@ -38,7 +38,8 @@ function listening() {
 let zip ;
 let feel ;
 let date ;
-let data ; 
+let data;
+
 app.post('/getData', getData);
 function getData(req, res) {
 zip = req.body.zip;
