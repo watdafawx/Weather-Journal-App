@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-projectData = {};
+let projectData ;
 
 // include Express to run server and routes
 const express = require("express");
@@ -35,31 +35,67 @@ function listening() {
   console.log("server running on localhost port: ", port);
 }
 
-data = [];
+let zip ;
+let feel ;
+let date ;
+let data ; 
+app.post('/getData', getData);
+function getData(req, res) {
+zip = req.body.zip;
+date = req.body.date;
+feel = req.body.feel;
+ 
+  data = { zip:` ${ zip }`, date:date, feel:feel };
+ 
+}
 
-// post route that takes the zip from the user input & requests weather data from openweathermap's api & stores it in the data obj & returns it to the user
 
-app.post("/weather", addWeather);
-function addWeather(req, res) {
-  let feelings = req.query.feelings;
-  const zip = req.body.zip;
+// Initialize all route with a callback function
+app.get('/all', sendData)
+
+// Callback function to complete GET '/all'
+function sendData(req, res) {
+  
   request(
     `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&units=metric&appid=${apiKey}`,
     function (error, response, body) {
-    //   console.log(body);
-      let data = JSON.parse(body);
-        if (response.statusCode === 200) {
-            res.status(200).send(body);
-            app.get("/all", sendData);
-            function sendData(request, response) {
-                response.send(data);
-            }
-           } else (response.statusCode === 400); {
+      
+      projectData = JSON.parse(body);
+      projectData.user = data
+
+      if (response.statusCode === 200) {
+        
+         res.status(200).send(projectData);
+       } else (response.statusCode === 400); {
             res.status(400).send();
           }
     }
   );
+
 }
+
+
+// data = [];
+
+// post route that takes the zip from the user input & requests weather data from openweathermap's api & stores it in the data obj & returns it to the user
+
+// app.post("/weather", addWeather);
+// function addWeather(req, res) {
+//   const zip = req.body.zip;
+//   request(
+//     `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&units=metric&appid=${apiKey}`,
+//     function (error, response, body) {
+//     //   console.log(body);
+//       let data = JSON.parse(body);
+//         if (response.statusCode === 200) {
+//             res.status(200).send(body);
+          
+//            } else (response.statusCode === 400); {
+//             res.status(400).send();
+//           }
+//     }
+//   );
+// }
 // not found 404
 app.get("*", (req, res) => {
   res.send("404 Page not found.");
