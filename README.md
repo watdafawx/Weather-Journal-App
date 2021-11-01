@@ -31,11 +31,4 @@ npm start
 
 * Twitter: [@watdafawx](https://twitter.com/watdafawx)
 * Github: [@watdafawx](https://github.com/watdafawx)
-* LinkedIn: [@Michael saad](https://linkedin.com/in/Michael saad)
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
-***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
+* LinkedIn: [@Michael saad](https://linkedin.com/in/michael-saad-261256212/)
