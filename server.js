@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-let projectData;
+projectData = {};
 
 // include Express to run server and routes
 const express = require("express");
@@ -35,22 +35,15 @@ function listening() {
   console.log("server running on localhost port: ", port);
 }
 
-let zip;
-let feel;
-let date;
-let data;
-let wData;
+app.post("/addData", addData);
+function addData(req, res) {
 
-app.post("/getData", getData);
-function getData(req, res) {
-  wData = req.body.weather;
-  zip = req.body.zip;
-  // console.log(wData);
-  date = req.body.date;
-  feel = req.body.feel;
-  data = { zip: ` ${zip}`, date: date, feel: feel };
-  projectData = { wData, data };
-  // console.log(projectData);
+projectData['wData'] = req.body.weather;
+projectData['date'] = req.body.date;
+projectData['temperature'] = req.body.temp;
+projectData['feelings'] = req.body.feel;
+
+res.send(projectData);
 }
 
 // Initialize all route with a callback function
@@ -58,8 +51,7 @@ app.get("/all", sendData);
 // Callback function to complete GET '/all'
 function sendData(req, res) {
   // projectData = JSON.parse(body);
-  res.status(200).send(projectData);
-  res.status(400).send();
+  res.send(projectData);
 }
 
 // not found 404

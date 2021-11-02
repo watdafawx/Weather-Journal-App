@@ -17,9 +17,18 @@ const openWeather = async (url) => {
   try {
     // Transform into JSON
     weatherData = await request.json();
-    // console.log(weatherData, "all DATA");
+    temp.innerHTML = weatherData.main.temp;
+
     // Write updated data to DOM elements
   } catch (error) {
+    // temp.innerHTML = "City not found check the zipcode";
+    document.getElementById("pic").src = "";
+    city.innerHTML = "";
+    temp.innerHTML = "City not found check the zipcode";
+    temp.style = "color:red;";
+    date.innerHTML = "";
+    description.innerHTML = "";
+    content.innerHTML = "";
     console.log("error", error);
     // if we catch an error warn the user that the city was not found & update DOM elements.
     // appropriately handle the error
@@ -40,7 +49,7 @@ const postData = async (url = "", data = []) => {
 
   try {
     const newData = response;
-    console.log(newData);
+    // console.log(newData);
     return newData;
   } catch (error) {
     console.log("error", error);
@@ -49,56 +58,52 @@ const postData = async (url = "", data = []) => {
 };
 
 /* Function to GET Project Data */
-const retrieveData = async () => {
+const updateUI = async () => {
   const request = await fetch("/all");
   try {
     // Transform into JSON
     const allData = await request.json();
-    console.log(allData, "all DATA");
+    // console.log(allData, "all DATA");
+
     // Write updated data to DOM elements
-    document.getElementById("temp").innerHTML =
-      Math.round(allData.wData.main.temp) + "°C";
-    temp.style = "";
-    document.getElementById("content").innerHTML = "you're feeling : " + allData.data.feel;
-    document.getElementById("date").innerHTML = allData.data.date;
-    let icon = allData.wData.weather[0].icon;
+    description.innerHTML = allData.wData.weather[0].description;
+    let icon = allData.wData.weather[0].icon; // the [0] is because the api spits 2 sets of descriptions i go with the first set & get the icon & the description from it.
     document.getElementById(
       "pic"
     ).src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
     city.innerHTML = `City : ${allData.wData.name}`;
-    description.innerHTML = allData.wData.weather[0].description;
+    document.getElementById("temp").innerHTML =
+      Math.round(allData.wData.main.temp) + "°C";
+    document.getElementById("date").innerHTML = allData.date;
+    let feels = (document.getElementById("content").innerHTML =
+      "you're feeling : " + allData.feelings);
+    if (feels === "you're feeling : ") {
+      document.getElementById("content").innerHTML = "";
+    }
+    temp.style = "";
   } catch (error) {
     console.log("error", error);
-    // if we catch an error warn the user that the city was not found & update DOM elements.
-    document.getElementById("pic").src = "";
-    city.innerHTML = "";
-    temp.innerHTML = "City not found check the zipcode";
-    temp.style = "color:red;";
-    date.innerHTML = "";
-    description.innerHTML = "";
-    content.innerHTML = "";
     // appropriately handle the error
   }
 };
 
 // get zip on click
-document.getElementById("generate").addEventListener("click", () => action())
-
+document.getElementById("generate").addEventListener("click", () => action());
 
 async function action() {
   let zipCode = document.getElementById("zip").value;
   let feelings = document.getElementById("feelings").value;
   const baseURL = `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode}&units=metric&appid=${apiKey}`;
-  await openWeather(baseURL);
-  try {
-    postData("/getData", {
-      weather: weatherData,
-      zip: zipCode,
-      date: newDate,
-      feel: feelings,
+  await openWeather(baseURL)
+    .then((data) => {
+      postData("/addData", {
+        weather: weatherData,
+        temp: temp,
+        date: newDate,
+        feel: feelings,
+      });
     })
-  } catch (error) {};
-  retrieveData();
- };
-  
-
+    .then((data) => {
+      updateUI();
+    });
+}
